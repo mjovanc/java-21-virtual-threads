@@ -1,12 +1,10 @@
 package com.mjovanc;
 
-import java.util.LinkedList;
-
 public class PlatformThreads {
     public static void main(String[] args) {
-        int numProducers = 5;
-        int numConsumers = 5;
-        int totalTasks = numProducers * 20000;
+        int numProducers = 1_000;
+        int numConsumers = 1_000;
+        int totalTasks = numProducers * 100;
 
         Buffer buffer = new Buffer(totalTasks);
 

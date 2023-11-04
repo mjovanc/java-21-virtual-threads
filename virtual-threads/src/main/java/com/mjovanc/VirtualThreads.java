@@ -1,12 +1,10 @@
 package com.mjovanc;
 
-import java.util.LinkedList;
-
 public class VirtualThreads {
     public static void main(String[] args) {
-        int numProducers = 5;
-        int numConsumers = 5;
-        int totalTasks = numProducers * 20000;
+        int numProducers = 1_000;
+        int numConsumers = 1_000;
+        int totalTasks = numProducers * 100;
 
         Buffer buffer = new Buffer(totalTasks);
 
@@ -16,13 +14,13 @@ public class VirtualThreads {
         Thread[] consumerThreads = new Thread[numConsumers];
 
         for (int i = 0; i < numProducers; i++) {
-            producerThreads[i] = new Thread(new Producer(buffer, "Producer " + (i + 1), totalTasks / numProducers));
-            producerThreads[i].start();
+            Runnable producerTask = new Producer(buffer, "Producer " + (i + 1), totalTasks / numProducers);
+            producerThreads[i] = Thread.ofVirtual().start(producerTask);
         }
 
         for (int i = 0; i < numConsumers; i++) {
-            consumerThreads[i] = new Thread(new Consumer(buffer, "Consumer " + (i + 1), totalTasks / numConsumers));
-            consumerThreads[i].start();
+            Runnable consumerTask = new Consumer(buffer, "Consumer " + (i + 1), totalTasks / numConsumers);
+            consumerThreads[i] = Thread.ofVirtual().start(consumerTask);
         }
 
         try {
